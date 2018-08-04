@@ -3,8 +3,6 @@
 set -e
 set -x
 
-SDCONF="/etc/bacula/bacula-sd.conf"
-
 # Updating owner of directory with configuration files.
 chown -R bacula:bacula /etc/bacula
 

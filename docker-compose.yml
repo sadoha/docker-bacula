@@ -1,0 +1,84 @@
+version: '2'
+services:
+  mariadb:
+    image: mariadb:10.3.8
+    restart: on-failure
+    container_name: mariadb
+    hostname: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass  
+      - MYSQL_USER=baculauser 
+      - MYSQL_PASSWORD=baculapass 
+      - MYSQL_DATABASE=bacula-db
+    volumes:
+      - /tmp/data/:/var/lib/mysql:rw
+    ports:
+      - "3306:3306/tcp"
+
+  baculadir:
+    build: bacula-dir 
+    restart: on-failure
+    container_name: bacula-dir
+    hostname: bacula-dir
+    links:
+      - mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_USER=baculauser
+      - MYSQL_PASSWORD=baculapass
+      - MYSQL_DATABASE=bacula-db
+      - MYSQL_HOST=172.16.100.5
+      - MYSQL_PORT=3306
+      - DIR_PASSWORD=ololo123
+      - DIR_MAIL=andrii.sadovskyi@gmail.com
+      - FD_PASSWORD=12345
+      - MON_FD_PASSWORD=00220022
+      - FD_CLIENT1_PASSWORD=12345123123
+      - FD_CLIENT1_HOST=172.16.100.5
+      - SD_PASSWORD=54321
+      - SD_HOST=172.16.100.5 
+    ports:
+      - "9101:9101/tcp"
+
+  baculasd:
+    build: bacula-sd
+    restart: on-failure
+    container_name: bacula-sd
+    hostname: bacula-sd
+    environment:
+      - SD_PASSWORD=54321
+      - MON_SD_PASSWORD=00110011
+    ports:
+      - "9103:9103/tcp"
+
+  baculafd:
+    build: bacula-fd
+    restart: on-failure
+    container_name: bacula-fd
+    hostname: bacula-fd
+    environment:
+      - FD_CLIENT1_PASSWORD=12345123123
+      - MON_FD_CLIENT1_PASSWORD=00220022123123
+    ports:
+      - "9102:9102/tcp"
+
+  baculaweb:
+    build: bacula-web
+    restart: on-failure
+    container_name: bacula-web
+    hostname: bacula-web
+    links:
+      - mariadb
+      - baculadir
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_USER=baculauser
+      - MYSQL_PASSWORD=baculapass
+      - MYSQL_DATABASE=bacula-db
+      - MYSQL_HOST=172.16.100.5
+      - MYSQL_PORT=3306
+      - PHP_TIMEZONE=Europe/Kiev
+    ports:
+      - "80:80/tcp"
+
+

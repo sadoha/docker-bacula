@@ -1,0 +1,14 @@
+[epel-bacula7]
+name=Bacula backports from rawhide
+baseurl=http://repos.fedorapeople.org/repos/slaanesh/bacula7/epel-$releasever/$basearch/
+enabled=1
+skip_if_unavailable=1
+gpgkey=http://repos.fedorapeople.org/repos/slaanesh/bacula7/RPM-GPG-KEY-slaanesh
+gpgcheck=1
+
+[epel-bacula7-source]
+name=Bacula backports from rawhide — Source
+baseurl=http://repos.fedorapeople.org/repos/slaanesh/bacula7/epel-$releasever/SRPMS
+enabled=0
+skip_if_unavailable=1
+gpgcheck=1

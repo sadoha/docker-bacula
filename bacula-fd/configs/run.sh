@@ -3,17 +3,19 @@
 set -e
 set -x
 
-SDCONF="/etc/bacula/bacula-fd.conf"
-
 # Updating owner of directory with configuration files.
 chown -R bacula:bacula /etc/bacula
 
-# Updating passwords in configuration files. 
-#
-# Bacula-fd
-sed -i "s/@@FD_PASSWORD@@/$FD_CLIENT1_PASSWORD/g" $SDCONF 
-# Bacula-mon-sd
-sed -i "s/@@MON_FD_PASSWORD@@/$MON_FD_CLIENT1_PASSWORD/g" $SDCONF 
+DIRS="  /etc/bacula/bacula-fd.conf 
+     "
+VARS="  FD_PASSWORD
+        MON_FD_PASSWORD 
+     "
+
+# Updating variables in configuration files.
+for variables in $VARS ; do
+  sed -i "s/@@$variables@@/${!variables}/g" ${DIRS}
+done
 
 # Running demon.
-cd /etc/bacula/ && bacula-fd -f -u ${BACULA_USER:-bacula} -g ${BACULA_GROUP:-bacula} -c $SDCONF
+bacula-fd -f -u bacula -g bacula -c /etc/bacula/bacula-fd.conf 

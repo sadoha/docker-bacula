@@ -57,8 +57,8 @@ services:
     container_name: bacula-fd
     hostname: bacula-fd
     environment:
-      - FD_CLIENT1_PASSWORD=12345123123
-      - MON_FD_CLIENT1_PASSWORD=00220022123123
+      - FD_PASSWORD=12345123123
+      - MON_FD_PASSWORD=00220022123123
     ports:
       - "9102:9102/tcp"
 

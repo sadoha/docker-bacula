@@ -31,9 +31,8 @@ for variables in $VARS ; do
 done
 
 # Creating Bacula tables in database.
-sleep 10
+sleep 30
 /usr/libexec/bacula/make_mysql_tables $MYSQL_DATABASE -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST
-sleep 10
 
 # Setting Bacula to use the Mysql library.
 echo 1|alternatives --config libbaccats.so
